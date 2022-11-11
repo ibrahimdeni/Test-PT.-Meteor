@@ -1,0 +1,28 @@
+GET http://localhost:5000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJOYWJpbGEgUHV0cmkgSGFyeWFudG8iLCJlbWFpbCI6Ik5hYmlsYUBnbWFpbC5jb20iLCJpYXQiOjE2NjgxODEyNjksImV4cCI6MTY2ODE4MTI4OX0.6IDeJx-H0t4GJqng6MwINTGCQQCFCVtvv2JyHNzelCY
+
+###
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "name" : "Nabila Putri Haryanto",
+    "email" : "Nabila@gmail.com",
+    "password" : "nabila",
+    "confPassword" : "nabila"
+}
+
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "email" : "Nabila@gmail.com",
+    "password" : "nabila"
+}
+
+###
+GET http://localhost:5000/token
+
+###
+DELETE http://localhost:5000/logout 
