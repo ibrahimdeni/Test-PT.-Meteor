@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 export const getUsers = async (req, res) => {
   try {
     const users = await Users.findAll({
-      attributes: ["id", "name", "email"],
+      attributes: ["id", "name", "email", "role"],
     });
     res.json(users);
   } catch (error) {
@@ -24,6 +24,7 @@ export const Register = async (req, res) => {
       name: name,
       email: email,
       password: hashPassword,
+      role: "user",
     });
     res.json({ msg: "Register Success" });
   } catch (error) {
@@ -47,7 +48,7 @@ export const Login = async (req, res) => {
       { userId, name, email },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "20s",
+        expiresIn: "10m",
       }
     );
     const refreshToken = jwt.sign(
@@ -71,7 +72,46 @@ export const Login = async (req, res) => {
     });
     res.json({ accessToken });
   } catch (error) {
-    res.status(404).json({ msg: "email tidak terdaftar" });
+    res.status(404).json({ msg: "this email is not registered yet" });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const response = await Users.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    await Users.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json({ msg: "User Updated" });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    await Users.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json({ msg: "User Deleted" });
+  } catch (error) {
+    console.log(error.message);
   }
 };
 
