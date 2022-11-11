@@ -2,17 +2,7 @@ import Users from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export const getUsers = async (req, res) => {
-  try {
-    const users = await Users.findAll({
-      attributes: ["id", "name", "email", "role"],
-    });
-    res.json(users);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+//Control-Authentification
 export const Register = async (req, res) => {
   const { name, email, password, confPassword } = req.body;
   if (password !== confPassword)
@@ -76,6 +66,40 @@ export const Login = async (req, res) => {
   }
 };
 
+export const Logout = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) return res.sendStatus(204);
+  const user = await Users.findAll({
+    where: {
+      refresh_token: refreshToken,
+    },
+  });
+  if (!user[0]) return res.sendStatus(204);
+  const userId = user[0].id;
+  await Users.update(
+    { refresh_token: null },
+    {
+      where: {
+        id: userId,
+      },
+    }
+  );
+  res.clearCookie("refreshToken");
+  return res.sendStatus(200);
+};
+
+//Control-Users
+export const getUsers = async (req, res) => {
+  try {
+    const users = await Users.findAll({
+      attributes: ["id", "name", "email", "role"],
+    });
+    res.json(users);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getUserById = async (req, res) => {
   try {
     const response = await Users.findOne({
@@ -113,26 +137,4 @@ export const deleteUser = async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
-};
-
-export const Logout = async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) return res.sendStatus(204);
-  const user = await Users.findAll({
-    where: {
-      refresh_token: refreshToken,
-    },
-  });
-  if (!user[0]) return res.sendStatus(204);
-  const userId = user[0].id;
-  await Users.update(
-    { refresh_token: null },
-    {
-      where: {
-        id: userId,
-      },
-    }
-  );
-  res.clearCookie("refreshToken");
-  return res.sendStatus(200);
 };
