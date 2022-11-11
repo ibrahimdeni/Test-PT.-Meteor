@@ -13,11 +13,13 @@ import { refreshToken } from "../controllers/RefreshToken.js";
 
 const router = express.Router();
 
-router.get("/users", verifyToken, getUsers);
-router.get("/users/:id", verifyToken, getUserById);
+//AUTH-ROUTES---------------------------------------------
 router.post("/users", Register);
 router.post("/login", Login);
 router.get("/token", refreshToken);
+//USERS-ROUTES--------------------------------------------
+router.get("/users", verifyToken, getUsers);
+router.get("/users/:id", verifyToken, getUserById);
 router.delete("/logout", Logout);
 router.patch("/users/:id", verifyToken, updateUser);
 router.delete("/users/:id", verifyToken, deleteUser);
