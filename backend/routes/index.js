@@ -17,6 +17,13 @@ import {
   getBooks,
   updateBooks,
 } from "../controllers/Books.js";
+import {
+  addCategories,
+  deleteCategory,
+  getCategories,
+  getCategoryById,
+  updateCategory,
+} from "../controllers/Categories.js";
 
 const router = express.Router();
 
@@ -36,5 +43,11 @@ router.post("/books", verifyToken, addBooks);
 router.get("/books/:id", verifyToken, getBookById);
 router.patch("/books/:id", verifyToken, updateBooks);
 router.delete("/books/:id", verifyToken, deleteBook);
+//CATEGORIES-ROUTES--------------------------------------------
+router.get("/categories", verifyToken, getCategories);
+router.post("/categories", verifyToken, addCategories);
+router.get("/categories/:id", verifyToken, getCategoryById);
+router.patch("/categories/:id", verifyToken, updateCategory);
+router.delete("/categories/:id", verifyToken, deleteCategory);
 
 export default router;
