@@ -7,6 +7,7 @@ import {
   getUserById,
   updateUser,
   deleteUser,
+  CheckAuth,
 } from "../controllers/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
@@ -30,6 +31,7 @@ const router = express.Router();
 //AUTH-ROUTES---------------------------------------------
 router.post("/users", Register);
 router.post("/login", Login);
+router.get("/check-auth", CheckAuth);
 router.get("/token", refreshToken);
 //USERS-ROUTES--------------------------------------------
 router.get("/users", verifyToken, getUsers);
